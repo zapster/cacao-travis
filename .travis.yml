@@ -12,6 +12,11 @@ install:
       wget http://downloads.sourceforge.net/project/jasmin/jasmin/jasmin-2.4/jasmin-2.4.zip -O $JASMIN_ZIP
       unzip -d $TRAVIS_BUILD_DIR/.. $JASMIN_ZIP
       export JASMIN_JAR=$TRAVIS_BUILD_DIR/../jasmin-2.4/jasmin.jar
+  - |
+      export LIBATOMIC_TAR=$TRAVIS_BUILD_DIR/../libatomic-ops.tar.gz
+      wget http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-7.4.2.tar.gz -O $LIBATOMIC_TAR
+      tar -C $TRAVIS_BUILD_DIR/.. -xf $LIBATOMIC_TAR
+      mv $TRAVIS_BUILD_DIR/../libatomic_ops-7.4.2 $TRAVIS_BUILD_DIR/src/mm/boehm-gc/libatomic_ops
   - ./autogen.sh
 script:
   - ./configure --with-java-runtime-library-prefix=$JAVA_RUNTIME_LIBRARY_PREFIX --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no && make && make test
