@@ -1,6 +1,6 @@
 addons:
   apt:
     packages:
-      - classpath
+      - gcj-jdk
 script:
   - ./autogen.sh && ./configure && make && make test
