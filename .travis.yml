@@ -8,3 +8,5 @@ env:
     - JAVA_RUNTIME_LIBRARY_PREFIX="/usr/lib/gcc/x86_64-linux-gnu/4.6"
 script:
   - ./autogen.sh && ./configure --with-java-runtime-library-prefix=$JAVA_RUNTIME_LIBRARY_PREFIX && make && make test
+after_failure:
+  - cat config.log
