@@ -13,6 +13,6 @@ install:
       unzip -d $TRAVIS_BUILD_DIR/.. $JASMIN_ZIP
       export JASMIN_JAR=$TRAVIS_BUILD_DIR/../jasmin-2.4/jasmin.jar
 script:
-  - ./autogen.sh && ./configure --with-java-runtime-library-prefix=$JAVA_RUNTIME_LIBRARY_PREFIX --with-jasmin-jar=$JASMIN_JAR && make && make test
+  - ./autogen.sh && ./configure --with-java-runtime-library-prefix=$JAVA_RUNTIME_LIBRARY_PREFIX --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no && make && make test
 after_failure:
   - cat config.log
