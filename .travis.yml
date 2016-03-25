@@ -1,2 +1,2 @@
 script:
-  - ./configure && make && make test
+  - ./autogen.sh && ./configure && make && make test
