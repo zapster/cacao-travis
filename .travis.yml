@@ -2,11 +2,16 @@ addons:
   apt:
     packages:
       - gcj-jdk
-      - jasmin-sable
 env:
   global:
     - JAVA_RUNTIME_LIBRARY_PREFIX="/usr/lib/gcc/x86_64-linux-gnu/4.6"
+install:
+  - |
+      export JASMIN_ZIP=$TRAVIS_BUILD_DIR/../jasmin.zip
+      wget http://downloads.sourceforge.net/project/jasmin/jasmin/jasmin-2.4/jasmin-2.4.zip -O $JASMIN_ZIP
+      unzip -d $TRAVIS_BUILD_DIR/.. $JASMIN_ZIP
+      export JASMIN_JAR=$TRAVIS_BUILD_DIR/../jasmin-2.4/jasmin.jar
 script:
-  - ./autogen.sh && ./configure --with-java-runtime-library-prefix=$JAVA_RUNTIME_LIBRARY_PREFIX && make && make test
+  - ./autogen.sh && ./configure --with-java-runtime-library-prefix=$JAVA_RUNTIME_LIBRARY_PREFIX --with-jasmin-jar=$JASMIN_JAR && make && make test
 after_failure:
   - cat config.log
