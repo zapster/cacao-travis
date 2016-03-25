@@ -3,6 +3,7 @@ addons:
     packages:
       - gcj-jdk
       - junit4
+      - libatomic-ops
 env:
   global:
     - JAVA_RUNTIME_LIBRARY_PREFIX="/usr/lib/gcc/x86_64-linux-gnu/4.6"
@@ -14,6 +15,6 @@ install:
       export JASMIN_JAR=$TRAVIS_BUILD_DIR/../jasmin-2.4/jasmin.jar
   - ./autogen.sh
 script:
-  - ./configure --with-java-runtime-library-prefix=$JAVA_RUNTIME_LIBRARY_PREFIX --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no && make && make test
+  - ./configure --with-java-runtime-library-prefix=$JAVA_RUNTIME_LIBRARY_PREFIX --with-jasmin-jar=$JASMIN_JAR && make && make test
 after_failure:
   - cat config.log
