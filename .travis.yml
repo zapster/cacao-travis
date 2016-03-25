@@ -2,6 +2,7 @@ addons:
   apt:
     packages:
       - gcj-jdk
+      - junit4
 env:
   global:
     - JAVA_RUNTIME_LIBRARY_PREFIX="/usr/lib/gcc/x86_64-linux-gnu/4.6"
