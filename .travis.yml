@@ -22,13 +22,15 @@ install:
       wget ftp://ftp.gnu.org/gnu/classpath/classpath-0.99.tar.gz -O $CLASSPATH_TAR
       tar -C $TRAVIS_BUILD_DIR/.. -xf $CLASSPATH_TAR
       export CLASSPATH_SRC=$TRAVIS_BUILD_DIR/../classpath-0.99
+      export CLASSPATH_LOG=$TRAVIS_BUILD_DIR/../classpath.log
       export CLASSPATH_INSTALL=$TRAVIS_BUILD_DIR/../classpath-install
       cd $CLASSPATH_SRC
-      ./configure --disable-plugin --disable-Werror --disable-gconf-peer --prefix $CLASSPATH_INSTALL
-      make install
+      ./configure --disable-plugin --disable-Werror --disable-gconf-peer --prefix $CLASSPATH_INSTALL > $CLASSPATH_LOG 2>&1
+      make install > $CLASSPATH_LOG 2>&1
       cd $TRAVIS_BUILD_DIR
   - ./autogen.sh
 script:
   - ./configure --with-java-runtime-library-prefix=$CLASSPATH_INSTALL --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no && make && make test
 after_failure:
   - cat config.log
+  - tail $CLASSPATH_LOG
