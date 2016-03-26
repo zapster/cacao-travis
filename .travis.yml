@@ -24,8 +24,9 @@ install:
       export CLASSPATH_SRC=$TRAVIS_BUILD_DIR/../classpath-0.99
       export CLASSPATH_INSTALL=$TRAVIS_BUILD_DIR/../classpath-install
       cd $CLASSPATH_SRC
-      ./configure --disable-plugin --disable-Werror --prefix $CLASSPATH_INSTALL
+      ./configure --disable-plugin --disable-Werror --disable-gconf-peer --prefix $CLASSPATH_INSTALL
       make install
+      cd $TRAVIS_BUILD_DIR
   - ./autogen.sh
 script:
   - ./configure --with-java-runtime-library-prefix=$CLASSPATH_INSTALL --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no && make && make test
