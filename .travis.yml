@@ -4,6 +4,9 @@ addons:
     packages:
       - gcj-jdk
       - junit4
+env:
+  matrix:
+    - JAVA_RUNTIME_LIBRARY="gnuclasspath"
 compiler:
   - clang
   - gcc
@@ -19,21 +22,25 @@ install:
       tar -C $TRAVIS_BUILD_DIR/.. -xf $LIBATOMIC_TAR
       mv $TRAVIS_BUILD_DIR/../libatomic_ops-7.4.2 $TRAVIS_BUILD_DIR/src/mm/boehm-gc/libatomic_ops
   - |
-      export CLASSPATH_TAR=$TRAVIS_BUILD_DIR/../classpath-0.99.tar.gz
-      wget ftp://ftp.gnu.org/gnu/classpath/classpath-0.99.tar.gz -O $CLASSPATH_TAR
-      tar -C $TRAVIS_BUILD_DIR/.. -xf $CLASSPATH_TAR
-      export CLASSPATH_SRC=$TRAVIS_BUILD_DIR/../classpath-0.99
-      export CLASSPATH_LOG=$TRAVIS_BUILD_DIR/../classpath.log
-      export CLASSPATH_INSTALL=$TRAVIS_BUILD_DIR/../classpath-install
-      cd $CLASSPATH_SRC
-      ./configure --disable-plugin --disable-Werror --disable-gconf-peer --prefix $CLASSPATH_INSTALL > $CLASSPATH_LOG 2>&1
-      tail $CLASSPATH_LOG
-      make install > $CLASSPATH_LOG 2>&1
-      tail $CLASSPATH_LOG
-      cd $TRAVIS_BUILD_DIR
+      if [[ "$JAVA_RUNTIME_LIBRARY" == "gnuclasspath" ]]
+      then
+        export CLASSPATH_TAR=$TRAVIS_BUILD_DIR/../classpath-0.99.tar.gz
+        wget ftp://ftp.gnu.org/gnu/classpath/classpath-0.99.tar.gz -O $CLASSPATH_TAR
+        tar -C $TRAVIS_BUILD_DIR/.. -xf $CLASSPATH_TAR
+        export CLASSPATH_SRC=$TRAVIS_BUILD_DIR/../classpath-0.99
+        export CLASSPATH_LOG=$TRAVIS_BUILD_DIR/../classpath.log
+        export CLASSPATH_INSTALL=$TRAVIS_BUILD_DIR/../classpath-install
+        cd $CLASSPATH_SRC
+        ./configure --disable-plugin --disable-Werror --disable-gconf-peer --prefix $CLASSPATH_INSTALL > $CLASSPATH_LOG 2>&1
+        tail $CLASSPATH_LOG
+        make install > $CLASSPATH_LOG 2>&1
+        tail $CLASSPATH_LOG
+        cd $TRAVIS_BUILD_DIR
+        export CONFIGURE_OPT="--with-java-runtime-library-prefix=$CLASSPATH_INSTALL "
+      fi
   - ./autogen.sh
 script:
-  - ./configure --enable-Werror --with-java-runtime-library-prefix=$CLASSPATH_INSTALL --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no && make && make check
+  - ./configure --with-java-runtime-library=$JAVA_RUNTIME_LIBRARY $CONFIGURE_OPT --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no --enable-Werror && make && make check
 after_failure:
   - cat config.log
   - tail $CLASSPATH_LOG
