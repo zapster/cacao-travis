@@ -49,7 +49,7 @@ install:
         export OPENJDK_SRC=$TRAVIS_BUILD_DIR/../icedtea6-1.13.10
         export OPENJDK_LOG=$TRAVIS_BUILD_DIR/../icedtea.log
         cd $OPENJDK_SRC
-        ./configure --disable-docs --disable-bootstrap --enable-cacao --with-jdk-home=/usr/lib/jvm/java-6-openjdk-amd64
+        ./configure --disable-docs --disable-bootstrap --without-rhino --enable-cacao --with-jdk-home=/usr/lib/jvm/java-6-openjdk-amd64
         make
         cd $TRAVIS_BUILD_DIR
         export CONFIGURE_OPT="--with-java-runtime-library-prefix=$OPENJDK_SRC --enable-jre-layout "
