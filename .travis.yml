@@ -4,6 +4,9 @@ addons:
     packages:
       - gcj-jdk
       - junit4
+      - icedtea-6-jre-cacao
+    sources:
+      - openjdk-6
 env:
   matrix:
     - JAVA_RUNTIME_LIBRARY="gnuclasspath"
