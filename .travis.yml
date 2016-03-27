@@ -5,6 +5,7 @@ addons:
       - gcj-jdk
       - junit4
       - icedtea-6-jre-cacao
+      - libcups2-dev
 env:
   matrix:
     - JAVA_RUNTIME_LIBRARY="gnuclasspath"
