@@ -33,7 +33,7 @@ install:
       cd $TRAVIS_BUILD_DIR
   - ./autogen.sh
 script:
-  - ./configure --with-java-runtime-library-prefix=$CLASSPATH_INSTALL --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no && make && make check
+  - ./configure --enable-Werror --with-java-runtime-library-prefix=$CLASSPATH_INSTALL --with-jasmin-jar=$JASMIN_JAR --with-libatomic-ops=no && make && make check
 after_failure:
   - cat config.log
   - tail $CLASSPATH_LOG
