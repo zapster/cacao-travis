@@ -5,11 +5,10 @@ addons:
       - gcj-jdk
       - junit4
       - icedtea-6-jre-cacao
-    sources:
-      - openjdk-6
 env:
   matrix:
     - JAVA_RUNTIME_LIBRARY="gnuclasspath"
+    - JAVA_RUNTIME_LIBRARY="openjdk"
 compiler:
   - clang
   - gcc
@@ -40,6 +39,20 @@ install:
         tail $CLASSPATH_LOG
         cd $TRAVIS_BUILD_DIR
         export CONFIGURE_OPT="--with-java-runtime-library-prefix=$CLASSPATH_INSTALL "
+      fi
+  - |
+      if [[ "$JAVA_RUNTIME_LIBRARY" == "openjdk" ]]
+      then
+        export OPENJDK_TAR=$TRAVIS_BUILD_DIR/../icedtea6.tar.gz
+        wget http://icedtea.classpath.org/download/source/icedtea6-1.13.10.tar.gz -O $OPENJDK_TAR
+        tar -C $TRAVIS_BUILD_DIR/.. -xf $OPENJDK_TAR
+        export OPENJDK_SRC=$TRAVIS_BUILD_DIR/../icedtea6-1.13.10
+        export OPENJDK_LOG=$TRAVIS_BUILD_DIR/../icedtea.log
+        cd $OPENJDK_SRC
+        ./configure --disable-docs --disable-bootstrap --enable-cacao --with-jdk-home=/usr/lib/jvm/java-6-openjdk-amd64
+        make
+        cd $TRAVIS_BUILD_DIR
+        export CONFIGURE_OPT="--with-java-runtime-library-prefix=$OPENJDK_SRC --enable-jre-layout "
       fi
   - ./autogen.sh
 script:
